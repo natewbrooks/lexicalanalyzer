@@ -36,6 +36,7 @@ class LexicalAnalyzer:
                     continue
                 # When the lexeme is finished
                 elif (self.lookahead.isspace()): 
+                    if (len(self.lexemes) == 0): start_pos+=1 # The first lexeme should start at char 1 
                     self.lexemes.append(Lexeme(lexeme, (start_pos - self.pos_offset), self.line_num))
                      
                     # Track if there was a new line
