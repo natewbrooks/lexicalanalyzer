@@ -5,7 +5,8 @@ class LexicalAnalyzer:
         # LOOKAHEAD
         self.lookahead: str = "" # Value of lookahead char
         self.pos: int = -1 # Position of lookahead
-        self.line_num: int = 0 # Line number of the lookahead
+        self.line_num: int = 1 # Line number of the lookahead
+        self.pos_offset: int = 0
         # LEXEMES
         self.lexemes = []
     
@@ -17,7 +18,6 @@ class LexicalAnalyzer:
             # not approved (invalid)
             
             self.pos += 1 # increment to move past current lexeme
-            
             start_pos = -1 # reset start position for current lexeme
             lexeme = "" # reset lexeme
             
@@ -29,10 +29,6 @@ class LexicalAnalyzer:
                 f.seek(self.pos)
                 self.lookahead = f.read(1)
                 
-                # Track if theres a new line
-                if(self.lookahead == "\n"):
-                    self.line_num += 1
-                
                 # Ignore whitespace
                 if(self.lookahead.isspace() and lexeme.strip() == ""):
                     start_pos = -1
@@ -40,7 +36,13 @@ class LexicalAnalyzer:
                     continue
                 # When the lexeme is finished
                 elif (self.lookahead.isspace()): 
-                    self.lexemes.append(Lexeme(lexeme, start_pos, self.line_num))
+                    self.lexemes.append(Lexeme(lexeme, (start_pos - self.pos_offset), self.line_num))
+                     
+                    # Track if there was a new line
+                    if self.lookahead == "\n":
+                        self.line_num += 1
+                        self.pos_offset = self.pos
+                        
                     print(self.lexemes[-1])
                     break
                 
@@ -68,7 +70,7 @@ class Lexeme:
     def __init__(self, value, pos, line_num):
         # RESERVED
         self.__keywords = ["program", "true", "false", "if", "int", "str"]
-        self.__symbols = [":=", ";", ":"]
+        self.__symbols = [":=", ";", ":", "<", ">", "*"]
         # Info
         self.value: str = value
         self.kind: str = ""
@@ -94,7 +96,7 @@ class Lexeme:
             self.kind = "ID"
     
     def __str__(self):
-        return f"{self.pos}:{self.line_num}:'{self.kind}' {self.value if (self.kind == "ID" or self.kind == "NUM") else ""}"
+        return f"{self.line_num}:{self.pos}:'{self.kind}' {self.value if (self.kind == "ID" or self.kind == "NUM") else ""}"
             
 
 
