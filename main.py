@@ -2,11 +2,17 @@ class LexicalAnalyzer:
     def __init__(self, filepath):
         # GIVEN
         self.filepath: str = filepath
+        # RESERVED VALUES
+        self.reserved: dict = {
+            "keywords": ["program", "true", "false", "if", "then", "else", "while", "do", "end", "print", "int", "bool"],
+            "symbols": [":=", ";", ":", "<", ">", "*", "<=", ">=", "!=", "+", "-", "or", "/", "mod", "and", "not," "(", ")"]
+        }
         # LOOKAHEAD
         self.lookahead: str = "" # Value of lookahead char
         self.pos: int = -1 # Position of lookahead
         self.line_num: int = 1 # Line number of the lookahead
         self.pos_offset: int = 0
+        self.comment_flag: bool = False # Should we ignore the remainder of the line?
         # LEXEMES
         self.lexemes = []
     
@@ -16,6 +22,8 @@ class LexicalAnalyzer:
             # if the lexeme is new, set its start position to the current position
             # keep going until the char is a whitespace (lexeme finished) or char is 
             # not approved (invalid)
+            
+            # If the char is a reserved keyword/symbol, we need to handle that as it occurs
             
             self.pos += 1 # increment to move past current lexeme
             start_pos = -1 # reset start position for current lexeme
@@ -29,6 +37,10 @@ class LexicalAnalyzer:
                 f.seek(self.pos)
                 self.lookahead = f.read(1)
                 
+
+                if(lexeme == "//"):
+                    self.comment_flag = True
+                
                 # Ignore whitespace
                 if(self.lookahead.isspace() and lexeme.strip() == ""):
                     start_pos = -1
@@ -36,15 +48,17 @@ class LexicalAnalyzer:
                     continue
                 # When the lexeme is finished
                 elif (self.lookahead.isspace()): 
-                    if (len(self.lexemes) == 0): start_pos+=1 # The first lexeme should start at char 1 
-                    self.lexemes.append(Lexeme(lexeme, (start_pos - self.pos_offset), self.line_num))
+                    if not self.comment_flag:
+                        if (len(self.lexemes) == 0): start_pos += 1 # The first lexeme should start at char 1 
+                        self.lexemes.append(Lexeme(lexeme, (start_pos - self.pos_offset), self.line_num, reserved=self.reserved))
+                        print(self.lexemes[-1])
                      
                     # Track if there was a new line
                     if self.lookahead == "\n":
                         self.line_num += 1
                         self.pos_offset = self.pos
-                        
-                    print(self.lexemes[-1])
+                        self.comment_flag = False
+                    
                     break
                 
                 # Add current lookahead to the lexeme being built
@@ -52,13 +66,13 @@ class LexicalAnalyzer:
                 self.pos += 1         
 
     def kind(self):
-        return self.lexemes[-1].kind
+        return self.lexemes[-1].kind if self.lexemes else ""
 
     def value(self):
-        return self.lexemes[-1].value
+        return self.lexemes[-1].value if self.lexemes else ""
 
     def position(self):
-        return self.lexemes[-1].pos
+        return self.lexemes[-1].pos if self.lexemes else ""
     
     def validate(self, str):
         return True
@@ -68,10 +82,9 @@ class LexicalAnalyzer:
         
 
 class Lexeme:
-    def __init__(self, value, pos, line_num):
+    def __init__(self, value, pos, line_num, reserved):
         # RESERVED
-        self.__keywords = ["program", "true", "false", "if", "int", "str"]
-        self.__symbols = [":=", ";", ":", "<", ">", "*"]
+        self.__reserved = reserved
         # Info
         self.value: str = value
         self.kind: str = ""
@@ -85,10 +98,10 @@ class Lexeme:
         if(self.value.isdigit()):
             self.kind = "NUM"
         # Keyword
-        elif self.value in self.__keywords:
+        elif self.value in self.__reserved["keywords"]:
             self.kind = self.value
         # Symbol
-        elif self.value in self.__symbols:
+        elif self.value in self.__reserved["symbols"]:
             self.kind = self.value
         # End of file
         elif self.value == ".":
