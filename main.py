@@ -56,6 +56,7 @@ class LexicalAnalyzer:
 
                 # End-of-file
                 if self.lookahead == "":
+                    # If we have a lexeme and that lexeme wasn't a comment, append it
                     if lexeme and not self.comment_flag:
                         if (len(self.lexemes) == 0): 
                             start_pos += 1  # The first lexeme should start at char 1
@@ -70,7 +71,7 @@ class LexicalAnalyzer:
                 if not self.validate(self.lookahead):
                     raise ValueError(f"Invalid character '{self.lookahead}' at line {self.line_num}, col {self.pos - self.pos_offset}")
 
-                # Comment mode
+                #  Handle comment flag being on by skipping the current line
                 if self.comment_flag:
                     if self.lookahead == "\n":
                         self.line_num += 1
@@ -87,21 +88,22 @@ class LexicalAnalyzer:
                     self.pos += 1
                     continue
                 
-                # If theres a comment
+                # If theres a comment trigger comment flag
                 if self.lookahead == "/" and self._peek(f) == "/":
                     self.comment_flag = True
                     f.read(1)  # consume second slash
                     self.pos += 2
                     continue
                 
-                # If it’s a symbol (may be two-character)
+                # If lookahead char is a recognized symbol (may be two-character)
                 if self.lookahead in self._sym_starters:
-                    # Emit any pending lexeme first
+                    # Append any pending lexeme first
                     if lexeme:
                         if (len(self.lexemes) == 0): start_pos += 1
                         self.lexemes.append(Lexeme(lexeme, self._col(start_pos), self.line_num, reserved=self.reserved))
                         return
 
+                    # Check the char after the lookahead to see if it matches a reserved symbol
                     nxt = self._peek(f)
                     candidate = self.lookahead + (nxt or "")
 
@@ -120,13 +122,13 @@ class LexicalAnalyzer:
                     # If it's a starter but not a declared symbol (e.g. lone '!'), it's invalid
                     raise ValueError(f"Invalid symbol '{self.lookahead}' at line {self.line_num}, col {self.pos - self.pos_offset + 1}")
                 
-                # When the lexeme is finished
+                # When the lexeme is finished and it wasnt commented out, append it
                 elif self.lookahead.isspace():
                     if not self.comment_flag:
                         if (len(self.lexemes) == 0): start_pos += 1 # The first lexeme should start at char 1 
                         self.lexemes.append(Lexeme(lexeme, self._col(start_pos), self.line_num, reserved=self.reserved))
                     
-                    # Track if there was a new line
+                    # Track if there was a new line introduced
                     if self.lookahead == "\n":
                         self.line_num += 1
                         self.pos_offset = self.pos
@@ -166,8 +168,8 @@ class LexicalAnalyzer:
     def position(self):
         return self.lexemes[-1].pos if self.lexemes else ""
     
+    # Allow letters, digits, underscore, whitespace, and valid symbols
     def validate(self, ch):
-        # Allow letters, digits, underscore, whitespace, and valid symbols
         return ch.isalnum() or ch == "_" or ch.isspace() or ch in self._sym_starters
         
     def __str__(self):

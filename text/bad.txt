@@ -11,5 +11,3 @@ program lexically_not_Ok :
    end %;
    print b~
 end
-
-.
