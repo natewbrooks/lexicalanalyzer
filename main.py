@@ -104,14 +104,21 @@ class LexicalAnalyzer:
 
                     nxt = self._peek(f)
                     candidate = self.lookahead + (nxt or "")
+
+                    # Prefer longest match (two-char ops)
                     if candidate in self._two_char_ops:
                         f.read(1)
-                        self.pos += 1  # consumed second char of two-char op
+                        self.pos += 1
                         self.lexemes.append(Lexeme(candidate, self._col(self.pos - 1), self.line_num, reserved=self.reserved))
                         return
-                    else:
+
+                    # Otherwise, only allow the single char if it's an allowed symbol in the grammar
+                    if self.lookahead in self.reserved["symbols"]:
                         self.lexemes.append(Lexeme(self.lookahead, self._col(self.pos), self.line_num, reserved=self.reserved))
-                        return 
+                        return
+
+                    # If it's a starter but not a declared symbol (e.g. lone '!'), it's invalid
+                    raise ValueError(f"Invalid symbol '{self.lookahead}' at line {self.line_num}, col {self.pos - self.pos_offset + 1}")
                 
                 # When the lexeme is finished
                 elif self.lookahead.isspace():
