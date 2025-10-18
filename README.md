@@ -25,7 +25,7 @@ This project runs on the Python interpreter. No external libraries were used.
 provide the relative filepath to the source program file to be analyzed. For example, `text/tricky.txt`
 4. The analyzer will then process the file and print each lexeme in the format `<line_num>:<char_pos>:'<token_type>' <value>`
 5. When the end of the file is reached, or an invalid character is processed, the analyzer's execution will stop.
-    - You will know the program ran successfully if you see the message `Lexical analysis on '{filename}.txt' complete`. 
+    - You will know the program ran successfully if you see the message `Lexical analysis on '{filepath}' complete`. 
         - Otherwise, the program will raise an error (e.g. `ValueError: Invalid symbol '!' at line 6, char 13`)
 
 ### Program Information
