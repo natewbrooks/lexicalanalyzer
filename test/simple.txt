@@ -1,0 +1,9 @@
+program Hiding :
+   int a;
+   a := 2;
+   while not (a != b) do
+     int b;
+     b := 2 * a + 4 / 6 - 8 mod 9 and true or false;
+   end ;
+   print b,
+.

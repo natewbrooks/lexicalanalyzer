@@ -1,0 +1,46 @@
+1:1:'program'
+1:9:'IDENTIFIER' Hiding
+1:16:':'
+2:4:'int' 
+2:8:'IDENTIFIER' a
+2:9:';' 
+3:4:'IDENTIFIER' a
+3:6:':=' -1 a
+3:9:'INTEGER' 2 
+3:10:';' 
+4:4:'while' 
+4:10:'not' 
+4:14:'(' 
+4:15:'IDENTIFIER' a
+4:17:'!=' 
+4:20:'IDENTIFIER' b
+4:21:')' 
+4:23:'do' 
+5:6:'int' 
+5:10:'IDENTIFIER' b
+5:11:';' 
+6:6:'IDENTIFIER' b
+6:8:':=' 
+6:11:'INTEGER' 2 
+6:13:'*' 
+6:15:'IDENTIFIER' 2 
+6:17:'+' 
+6:19:'INTEGER' 4 
+6:21:'/' 4 a
+6:23:'INTEGER' 6 
+6:25:'-' 
+6:27:'INTEGER' 8 
+6:29:'mod'
+6:33:'INTEGER' 9 
+6:35:'and' 
+6:39:'true' 
+6:44:'or' 
+6:47:'false' 
+6:52:';' 
+7:4:'end' 
+7:8:';' 
+8:4:'print'
+8:10:'IDENTIFIER' b
+9:1:','
+9:2:'.'
+9:3:'end-of-text'

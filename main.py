@@ -4,7 +4,7 @@ class LexicalAnalyzer:
         # RESERVED VALUES
         self.reserved: dict = {
             "keywords": ["program", "true", "false", "if", "then", "else", "while", "do", "end", "print", "int", "bool", "and", "or", "not", "mod"],
-            "symbols": ["=", ":=", ";", ":", "<", ">", "*", "<=", ">=", "!=", "+", "-", "/", "(", ")"]
+            "symbols": ["=", ":=", ";", ",", ".", ":", "<", ">", "*", "<=", ">=", "=<", "!=", "+", "-", "/", "(", ")"]
         }
         # OPERATOR HELPERS
         self._two_char_ops = {":=", "<=", ">=", "!="}

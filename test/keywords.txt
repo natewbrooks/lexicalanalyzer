@@ -1,0 +1,3 @@
+program end bool int 
+mod print and or 
+if then else end while do true false not

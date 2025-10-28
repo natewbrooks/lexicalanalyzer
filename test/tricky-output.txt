@@ -1,0 +1,28 @@
+1:1:'program'
+1:9:'IDENTIFIER' tricky
+1:15:':'
+2:4:'IDENTIFIER' if4
+2:8:'IDENTIFIER' a
+2:10:'<'
+2:12:'IDENTIFIER' b
+2:14:'IDENTIFIER' then5
+3:6:'INTEGER' 2
+3:7:'int'
+3:11:'IDENTIFIER' b
+3:12:';'
+4:6:'IDENTIFIER' b
+4:8:':='
+4:11:'INTEGER' 25
+4:14:'*'
+4:16:'IDENTIFIER' a
+5:4:'INTEGER' 5
+5:5:'else'
+6:6:'IDENTIFIER' booll
+6:12:'IDENTIFIER' b
+6:13:';'
+7:1:'bool'
+7:6:'IDENTIFIER' c
+7:7:';'
+8:4:'IDENTIFIER' end_d
+9:1:'end'
+9:4:'end-of-text'

@@ -1,0 +1,9 @@
+program tricky:
+   if4 a < b then5
+     2int b;
+     b := 25 * a
+   5else
+     booll b;
+bool c; 
+   end_d
+end
