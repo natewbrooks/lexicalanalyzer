@@ -1,5 +1,5 @@
 from analyzer.lexicalanalyzer import LexicalAnalyzer
-from parser.synaxparser import SyntaxParser
+from parser.syntaxparser import SyntaxParser
 
 import os
 
