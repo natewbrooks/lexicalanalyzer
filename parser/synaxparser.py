@@ -1,4 +1,4 @@
-from lexicalanalyzer import LexicalAnalyzer, Lexeme
+from analyzer.lexicalanalyzer import LexicalAnalyzer, Lexeme
 
 class SyntaxParser:
     def __init__(self, la: LexicalAnalyzer):

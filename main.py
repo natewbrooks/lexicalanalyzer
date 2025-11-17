@@ -1,17 +1,17 @@
-from lexicalanalyzer import LexicalAnalyzer
-from parser import SyntaxParser
+from analyzer.lexicalanalyzer import LexicalAnalyzer
+from parser.synaxparser import SyntaxParser
 
 import os
 
 def analyze_file(filepath: str):
     la = LexicalAnalyzer(filepath=filepath)
     sp = SyntaxParser(la)
-    print(f"Lexical+Syntax analysis on '{filepath}' complete.")
+    print(f"Lexical and syntax analysis on '{filepath}' complete.")
 
 def analyze_directory(dirpath: str):
     for root, _, files in os.walk(dirpath):
         for name in files:
-            print("Analyzing: ", name)
+            print("Analyzing:", name)
             filepath = os.path.join(root, name)
             analyze_file(filepath)
 
