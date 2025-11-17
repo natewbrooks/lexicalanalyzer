@@ -4,10 +4,10 @@ class LexicalAnalyzer:
         # RESERVED VALUES
         self.reserved: dict = {
             "keywords": ["program", "true", "false", "if", "then", "else", "while", "do", "end", "print", "int", "bool", "and", "or", "not", "mod"],
-            "symbols": ["=", ":=", ";", ",", ".", ":", "<", ">", "*", "<=", ">=", "=<", "!=", "+", "-", "/", "(", ")"]
+            "symbols": ["=", ":=", ";", ",", ".", ":", "<", ">", "*", ">=", "=<", "!=", "+", "-", "/", "(", ")"]
         }
         # OPERATOR HELPERS
-        self._two_char_ops = {":=", "<=", ">=", "!="}
+        self._two_char_ops = {":=", ">=", "=<", "!="}
         self._sym_starters = set(":<>=!;.,*+-/()")
         # LOOKAHEAD
         self.lookahead: str = "" # Value of lookahead char
@@ -18,6 +18,10 @@ class LexicalAnalyzer:
         self.eof_emitted: bool = False # Has EOF token been emitted?
         # LEXEMES
         self.lexemes = []
+        
+    # Returns the last appended lexeme object
+    def last(self):
+        return self.lexemes[-1] if self.lexemes else None
 
     # Returns the character infront of the the current lookahead character in the file. 
     # Gets the current position in the file, reads the next char, returns to the previous (current) lookahead location,
